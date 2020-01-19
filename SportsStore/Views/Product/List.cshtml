@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model ProductsListViewModel
+
+@foreach(var p in Model.Products){
+    <div class="card card-outline-primary m-1 p-1">
+        <div class="bg-faded">
+            <h4>
+                @p.Name
+                <span class="badge badge-pill badge-primary" style="float: right">
+                    <small>@p.Price.ToString("C")</small>
+                </span>
+            </h4>
+        </div>
+        <div class="card-text p-1">@p.Description</div>
+    </div>
+}
+
+<div page-info="@Model.PageInfo" page-action="List"
+     page-classes-enabled="true"
+     page-class="btn"
+     page-class-normal="btn-secondry"
+     page-class-selected="btn-primary" class="btn-group pull-right m-1">
+</div>
