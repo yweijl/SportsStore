@@ -24,9 +24,9 @@ namespace SportsStore.Controllers
             });
         }
 
-        public RedirectToActionResult AddToCart(int productId, string returnUrl)
+        public RedirectToActionResult AddToCart(int Id, string returnUrl)
         {
-            var product = _productRepository.Products.FirstOrDefault(x => x.Id == productId);
+            var product = _productRepository.Products.FirstOrDefault(x => x.Id == Id);
 
             if (product == null) 
                 return RedirectToAction("index", new {returnUrl});
