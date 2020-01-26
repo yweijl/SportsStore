@@ -30,7 +30,9 @@ namespace SportsStore
                 options.UseSqlServer(Configuration["Data:SportStoreProducts:ConnectionString"]));
 
             services.AddTransient<IProductRepository, EfProductRepository>();
-            services.AddMvc(options => options.EnableEndpointRouting = false );
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,16 +51,30 @@ namespace SportsStore
                 });
             }
 
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    "pagination",
-                    "Products/Page{productPage}",
-                    new {Controller = "Product", action = "List"});
+                    null,
+                    "{Category}/Page{productPage:int}",
+                    new { Controller = "Product", action = "List" });
 
                 routes.MapRoute(
-                    "default", 
-                    "{controller=Product}/{action=List}/{id?}");
+                    null,
+                    "Page{productPage:int}",
+                    new { Controller = "Product", action = "List", productPage = 1 });
+
+                routes.MapRoute(
+                    null,
+                    "{Category}",
+                    new { Controller = "Product", action = "List", productPage = 1 });
+
+                routes.MapRoute(
+                    null,
+                    "",
+                    new { Controller = "Product", action = "List", productPage = 1 });
+
+                routes.MapRoute(null, "{Category}/{action}/{id?}");
             });
 
             app.EnsurePopulated();
