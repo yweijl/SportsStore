@@ -30,6 +30,8 @@ namespace SportsStore
                 options.UseSqlServer(Configuration["Data:SportStoreProducts:ConnectionString"]));
 
             services.AddTransient<IProductRepository, EfProductRepository>();
+            services.AddScoped(SessionCart.GetCart);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddMemoryCache();
             services.AddSession();
@@ -56,7 +58,7 @@ namespace SportsStore
             {
                 routes.MapRoute(
                     null,
-                    "{Category}/Page{productPage:int}",
+                    "{category}/Page{productPage:int}",
                     new { Controller = "Product", action = "List" });
 
                 routes.MapRoute(
@@ -66,7 +68,7 @@ namespace SportsStore
 
                 routes.MapRoute(
                     null,
-                    "{Category}",
+                    "{category}",
                     new { Controller = "Product", action = "List", productPage = 1 });
 
                 routes.MapRoute(
@@ -74,7 +76,7 @@ namespace SportsStore
                     "",
                     new { Controller = "Product", action = "List", productPage = 1 });
 
-                routes.MapRoute(null, "{Category}/{action}/{id?}");
+                routes.MapRoute(null, "{controller}/{action}/{id?}");
             });
 
             app.EnsurePopulated();
