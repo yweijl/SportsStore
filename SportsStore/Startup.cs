@@ -30,6 +30,7 @@ namespace SportsStore
                 options.UseSqlServer(Configuration["Data:SportStoreProducts:ConnectionString"]));
 
             services.AddTransient<IProductRepository, EfProductRepository>();
+            services.AddTransient<IOrderRepository, EfOrderRepository>();
             services.AddScoped(SessionCart.GetCart);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(options => options.EnableEndpointRouting = false);

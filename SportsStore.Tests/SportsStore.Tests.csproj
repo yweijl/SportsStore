@@ -26,4 +26,8 @@
     <ProjectReference Include="..\SportsStore\SportsStore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\" />
+  </ItemGroup>
+
 </Project>
