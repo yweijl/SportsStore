@@ -1,9 +1,11 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.Models;
 
 namespace SportsStore.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly IProductRepository _repository;
@@ -24,9 +26,23 @@ namespace SportsStore.Controllers
             if (!ModelState.IsValid) return View(product);
             
             _repository.SaveProduct(product);
-            TempData["Message"] = $"{product.Name} has been saved";
+            TempData["message"] = $"{product.Name} has been saved";
             return RedirectToAction("Index");
 
+        }
+
+        public ViewResult Create() => View("Edit", new Product());
+
+        [HttpPost]
+        public IActionResult Delete(int productId)
+        {
+            var deletedProduct = _repository.DeleteProduct(productId);
+            if (deletedProduct != null)
+            {
+                TempData["message"] = $"{deletedProduct.Name} was deleted";
+            }
+
+            return RedirectToAction("index");
         }
     }
 }

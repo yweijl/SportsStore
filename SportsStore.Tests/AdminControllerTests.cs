@@ -12,6 +12,18 @@ namespace SportsStore.Tests
     public class AdminControllerTests
     {
         [Fact]
+        public void Can_Delete_Products()
+        {
+            var products = Products.AsQueryable();
+            var repo = new Mock<IProductRepository>();
+            repo.Setup(x => x.Products).Returns(products);
+
+            var target = new AdminController(repo.Object);
+            target.Delete(products.Single(x => x.Id == 2).Id);
+            repo.Verify(x => x.DeleteProduct(2));
+        }
+
+        [Fact]
         public void Index_Contains_All_Products()
         {
             var products = Products;
@@ -61,7 +73,7 @@ namespace SportsStore.Tests
         {
             var repo = new Mock<IProductRepository>();
             var tempData = new Mock<ITempDataDictionary>();
-            var target = new AdminController(repo.Object){TempData = tempData.Object};
+            using var target = new AdminController(repo.Object){TempData = tempData.Object};
 
             var product = new Product {Name = "Test"};
             var result = target.Edit(product);
@@ -75,7 +87,7 @@ namespace SportsStore.Tests
         public void Cannot_Save_Invalid_Changes()
         {
             var repo = new Mock<IProductRepository>();
-            var target = new AdminController(repo.Object);
+            using var target = new AdminController(repo.Object);
 
             var product = new Product { Name = "Test" };
 

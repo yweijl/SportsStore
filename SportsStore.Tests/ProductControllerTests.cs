@@ -94,7 +94,7 @@ namespace SportsStore.Tests
 
             using var controller = new ProductController(repo.Object) {PageSize = 3};
 
-            Func<ViewResult, ProductsListViewModel> GetModel = result => result?.ViewData?.Model as ProductsListViewModel;
+            static ProductsListViewModel GetModel(ViewResult result) => result?.ViewData?.Model as ProductsListViewModel;
 
             var res1 = GetModel(controller.List(category))?.PageInfo.TotalItems;
 

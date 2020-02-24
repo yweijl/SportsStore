@@ -16,7 +16,7 @@ namespace SportsStore.Tests
             var cart = new Cart();
             var order = new Order();
 
-            var target = new OrderController(cart, repo.Object);
+            using var target = new OrderController(cart, repo.Object);
 
             var result = target.Checkout(order) as ViewResult;
 
@@ -33,9 +33,7 @@ namespace SportsStore.Tests
             var cart = new Cart();
             cart.AddItem(new Product(), 1);
 
-            var order = new Order();
-
-            var target = new OrderController(cart, repo.Object);
+            using var target = new OrderController(cart, repo.Object);
             target.ModelState.AddModelError("error", "error");
             var result = target.Checkout(new Order()) as ViewResult;
 
@@ -52,9 +50,7 @@ namespace SportsStore.Tests
             var cart = new Cart();
             cart.AddItem(new Product(), 1);
 
-            var order = new Order();
-
-            var target = new OrderController(cart, repo.Object);
+            using var target = new OrderController(cart, repo.Object);
             
             var result = target.Checkout(new Order()) as RedirectToActionResult;
 
